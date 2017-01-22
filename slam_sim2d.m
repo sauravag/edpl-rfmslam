@@ -200,6 +200,8 @@ function gEdges = buildEdges(graphNodes)
 % This function generates the graph edges
 % Very useful to speed up analysis
 
+fprintf('Start building data association edges...\n');
+
 % get number of nodes.
 N = length(graphNodes);
 

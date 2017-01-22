@@ -8,7 +8,7 @@ function groundTruth = load_ground_truth_2D(fname)
 % fname: the name of file
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-fprintf('Reading ground truth data data from file...\n')
+% fprintf('Reading ground truth data data from file...\n')
 
 % open the file
 fid = fopen(fname);
@@ -81,7 +81,7 @@ end
 fclose(fid);
 
 
-fprintf('    Total poses: %d  Total Features: %d \n', numposes,numfeats)
-fprintf('Done reading ground truth data from file.\n')
+% fprintf('    Total poses: %d  Total Features: %d \n', numposes,numfeats)
+% fprintf('Done reading ground truth data from file.\n')
 
 end

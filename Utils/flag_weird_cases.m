@@ -17,7 +17,7 @@ function flag_weird_cases(baseDirectory)
 doRFMSLAM = 1;
 doGTSAM = 1;
 
-flagThreshPos = 20.0;
+flagThreshPos = 0.02*1000.87;
 
 %% RFM-SLAM
 if doRFMSLAM
@@ -30,17 +30,21 @@ if doRFMSLAM
         warning('RFMSLAM has results for less than 50 runs in Folder: %s \n', baseDirectory(end-10:end))
     end
     
+    fprintf('\n \n ============= Folder %s ========== \n \n', baseDirectory(end-10:end)); 
+    
     for i=1:length(rfmslamResults)
         
         % rmsError(1) is theta and rmsError(2) is position
         if  rfmslamResults(i).rmsError(2) > flagThreshPos % || rfmslamResults(i).rmsError(1) > 2.0
             rff = rff + 1;
-            fprintf('RFMSLAM Error: %f Flag Run: %d in folder %s \n', rfmslamResults(i).rmsError(2), i, baseDirectory(end-10:end))
+            fprintf('    RFMSLAM Error: %f Flag Run: %d in folder %s \n', rfmslamResults(i).rmsError(2), i, baseDirectory(end-10:end))
         end
     end
     
     if rff >0
-        fprintf('===> RFMSLAM Number of Failures: %d in folder %s \n',rff, baseDirectory(end-10:end)); 
+        fprintf('=====> RFMSLAM Number of Failures: %d in folder %s <====== \n \n',rff, baseDirectory(end-10:end)); 
+    else
+        fprintf('=====> No Weird RFMSLAM Case in folder %s <====== \n', baseDirectory(end-10:end)); 
     end
    
 end
@@ -67,13 +71,15 @@ if doGTSAM
         
         if gtsamResults(i).rmsError(2) > flagThreshPos % || gtsamResults(i).rmsError(1) > 2.0
             gtf = gtf + 1;
-            fprintf('GTSAM Error: %f Flag Run: %d in folder %s \n',gtsamResults(i).rmsError(2), i, baseDirectory(end-10:end))
+            fprintf('    GTSAM Error: %f Flag Run: %d in folder %s \n',gtsamResults(i).rmsError(2), i, baseDirectory(end-10:end))
         end
   
     end
     
-    if gtf >0 
-        fprintf('===> GTSAM Number of Failures: %d Unsolved: %d  in folder %s \n', gtf, gtunsolved, baseDirectory(end-10:end)); 
+    if gtf >0
+        fprintf('===> GTSAM Number of Failures: %d Unsolved: %d  in folder %s \n', gtf, gtunsolved, baseDirectory(end-10:end));
+    else
+        fprintf('=====> No Weird GTSAM Case in folder %s <====== \n', baseDirectory(end-10:end));
     end
 
 end

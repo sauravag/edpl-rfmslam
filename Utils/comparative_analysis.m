@@ -56,6 +56,7 @@ if doRFMSLAM
     sumRMSlmRFMSLAM_x = 0;
     sumRMSlmRFMSLAM_y = 0;
     sumOptimizationTimeRFMSLAM = 0;
+    sumManoptTimeRFMSLAM = 0;
     storeFolderName = 'rfmslam/';
     fileID = fopen(strcat(baseDirectory,'rfmslamsummary.txt'),'wt');
     
@@ -72,8 +73,8 @@ if doRFMSLAM
         % path of gtsam output folder inside run folder
         outputfolder = strcat(runFolder,storeFolderName);
         
-        outdat = rfmslam_analysis(runFolder, outputfolder, initialSigma, groundTruth.edges);
-%         load(strcat(outputfolder,'rfmslam_results.mat'),'outdat');
+%         outdat = rfmslam_analysis(runFolder, outputfolder, initialSigma, groundTruth.edges);
+        load(strcat(outputfolder,'rfmslam_results.mat'),'outdat');
         
         rfmslamResults(i).estimatedPose  = outdat.estimatedPose;
         rfmslamResults(i).estimatedFeats = outdat.estimatedFeats;
@@ -104,14 +105,15 @@ if doRFMSLAM
         sumRMSlmRFMSLAM_x = sumRMSlmRFMSLAM_x + rfmslamResults(i).rmsLmErrorX;
         sumRMSlmRFMSLAM_y = sumRMSlmRFMSLAM_y + rfmslamResults(i).rmsLmErrorY;
         sumOptimizationTimeRFMSLAM = sumOptimizationTimeRFMSLAM + outdat.totalTime;
+        sumManoptTimeRFMSLAM = sumManoptTimeRFMSLAM +  outdat.tOrientationOpt;
         
         % Write data to file
         fprintf(fileID, '================ RUN %d =============== \n', i);
-        fprintf(fileID, 'RMS Heading Error = %f degrees \n', rfmslamResults(i).rmsError(1));
-        fprintf(fileID, 'RMS Localization Error = %f \n', rfmslamResults(i).rmsError(2));
+        fprintf(fileID, 'RMS Localization Error = %f (m) \n', rfmslamResults(i).rmsError(2));              
         fprintf(fileID, 'Terminal Localization Error = %f \n', rfmslamResults(i).localizationError(end,2));
         fprintf(fileID, 'Feature Localization Error X = %f \n', rfmslamResults(i).rmsLmErrorX);
         fprintf(fileID, 'Feature Localization Error Y = %f \n', rfmslamResults(i).rmsLmErrorY);
+         fprintf(fileID, 'RMS Heading Error = %f degrees \n', rfmslamResults(i).rmsError(1));
         fprintf(fileID, 'Time to Solve Orientation: %f seconds \n', rfmslamResults(i).tOrientationOpt);
         fprintf(fileID, 'Total Time to Solve: %f seconds \n', rfmslamResults(i).totalTime);
         fprintf(fileID, '---------------------------------------- \n');
@@ -134,6 +136,7 @@ if doRFMSLAM
     fprintf(fileID,'Avg RMS Landmark Localization Error in X = %f \n', sumRMSlmRFMSLAM_x / nRuns);
     fprintf(fileID,'Avg RMS Landmark Localization Error in Y = %f \n', sumRMSlmRFMSLAM_y / nRuns);
     fprintf(fileID,'Avg Time for Orientation Optimization and LLSQ = %f \n', sumOptimizationTimeRFMSLAM / nRuns);
+    fprintf(fileID,'Avg Time for Orientation Optimization = %f \n', sumManoptTimeRFMSLAM / nRuns);
     fprintf(fileID,'----------END------------- \n');
     
     fclose(fileID);
