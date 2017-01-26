@@ -12,9 +12,9 @@ classdef TwoDRangeBearingModel < ObservationModelBase
     end
     
     properties
-        sigma_b = [0.025;0.3*pi/180];
+        sigma_b = [0.025;0.25*pi/180];%[0.025;0.3*pi/180];
         eta = [0.0;0.0];
-        maxRange = 8.0;
+        maxRange = 20.0;
         fov = 2*pi;
         fHandle = [];
     end

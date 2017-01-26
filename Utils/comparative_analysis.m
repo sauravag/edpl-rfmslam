@@ -20,8 +20,8 @@ maxIterat = 100;
 absErrorTol = 1e-12;
 relErrorTol = 1e-12;
 initialSigma = [0.01;0.01;0.01*pi/180]; % Initial uncertainty at pose in ICRA SIMS [0.01;0.01;0.05*pi/180]
-doRFMSLAM = 1;
-doGTSAM = 0;
+doRFMSLAM = 0;
+doGTSAM = 1;
 
 %% Setup the paths
 

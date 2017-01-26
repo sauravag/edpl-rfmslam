@@ -12,21 +12,21 @@ set(0,'DefaultFigureWindowStyle','docked')
 
 %% STEP 1
 % CHANGE this variable to choose which sim to analyze
-datafoldername = 'MapL1NL88/';
+datafoldername = 'MapL1/';
 
 % CHOOSE which run to plot
-runToPlot = 8;
+runToPlot = 1;
 
 doLFGO = 0;
-doRFMSLAM = 1;
+doRFMSLAM = 0;
 doGTSAM = 1;
-doTrueMap = 0;
+doTrueMap = 1;
 
 %% STEP 2
 % base diretory where runs live
 if isunix ==1
     [~,username] = system('whoami');
-    baseDirectory = ['/home/',username(1:end-1),'/Dropbox/PLUM/MatlabData/'];
+    baseDirectory = ['/home/',username(1:end-1),'/MATLAB/'];
     % Mac is unix so have to check here
     if ismac==1
         baseDirectory = '/Users/sauravagarwal/Box Sync/RFM-SLAM/MatlabData/ICRA2017/';

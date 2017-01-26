@@ -26,15 +26,12 @@ datafile = strcat(runFolder,'simData.graph');
 %% Initialize graph, initial estimate, and odometry noise
 [graph,initial] = load2D(fullfile(datafile));
 
-fName = strcat(runFolder,'plumDat_heading.txt');
+[headingAngle,sigmaHeading] = loadHeadingFromFile(datafile);
 
-fileID = fopen(fName,'r');
-if fileID ~= -1
+if ~isempty(headingAngle)
+    
     %% Taking the Yaw Angle estimate from the data file
-    sigmaHeading = fscanf(fileID,'%f',1);
-    headingAngle = fscanf(fileID,'%f');
-    vertexCount = size(headingAngle);
-    fclose(fileID);
+    vertexCount = length(headingAngle);
     
     %% Providing the prior for the poses in order to incorporate the heading information
     headingNoiseModel  = noiseModel.Diagonal.Sigmas([Inf; Inf; sigmaHeading]);
@@ -120,5 +117,69 @@ end
 
 tGTSAMStop = toc(tGTSAMStart);
 fprintf('Total time for GTSAM = %f seconds \n',tGTSAMStop)
+
+end
+
+function [headingAngle, sigmaHeading] = loadHeadingFromFile(fname)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Insert data into graph by reading
+% a text file.
+%
+% Input:
+% baseDir: path to directory containig file
+% fname: the name of file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+fprintf('Reading sim heading data from input file...\n')
+
+% open the file
+fid = fopen(fname);
+
+% the total number of nodes
+numnodes = 0;
+
+% heading measurements
+headingAngle = [];
+
+% heading uncertainty
+sigmaHeading = 0;
+
+% read it line by line
+while true
+    
+    % read line
+    tline = fgetl(fid);
+    
+    % check if it has anything in it
+    if ~ischar(tline);
+        break;%end of file
+    end
+    
+    % if it had something, lets see what it had
+    % Scan the line upto the first space
+    % we will identify what data type this is
+    str = textscan(tline,'%s %*[ ]');
+    
+    if strcmp(str{1},'HD2')
+        
+        datastr = textscan(tline,'%s %d %f %f');
+        numnodes = datastr{2};
+        
+        % store the data in each node
+        headingAngle(numnodes) =  datastr{3};
+        
+        if numnodes == 1
+            sigmaHeading = datastr{4};
+        end
+            
+    end
+    
+end
+
+% close file
+fclose(fid);
+
+fprintf('Total nodes: %d \n', numnodes)
+fprintf('Done reading heading file.\n')
 
 end
