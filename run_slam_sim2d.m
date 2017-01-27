@@ -20,7 +20,7 @@ if exist('manopt_version', 'file') ~= 2
     addpath(genpath('../../Softwares/CircStat2012a'))
 end
 
-fname = 'MapL1';
+fname = 'Map25kF4';
 
 inpDat = load(['./Environment/',fname,'.mat']);
 nsims = 1;

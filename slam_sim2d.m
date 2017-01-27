@@ -23,13 +23,13 @@ param.storeFrequency = 1; % We need this to be 1, because all sensed heading val
 param.odoNoiseLevelScale = odoNL; % [1,2,3,4] scale the motion odometery noises with this value
 param.rbNoiseLevelScale = rbNL; % [1,2,3,4] scale the range bearing noises with this value
 param.numSimLoops = 1; % number of loops robot will drive around trajectory
-param.robot.maxVelocity = 5.0;
-param.numSamples = 10;
-param.simulator.dt = 0.1;
+param.robot.maxVelocity = 10.0;
+% param.numSamples = 10;
+param.simulator.dt = 0.05;
 param.knownOrientation = 1; % if 1, heading is known if 0 heading is not known
-param.headingUpdateInterval = 1; % time interval between heading updates
-param.maxObservations = 1000;
-param.minObservations = 50;
+% param.headingUpdateInterval = 1; % time interval between heading updates
+% param.maxObservations = 1000;
+% param.minObservations = 50;
 param.world.landmarks = struct();
 
 % Put robot at initial point and set belief

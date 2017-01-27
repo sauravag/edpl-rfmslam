@@ -12,7 +12,7 @@ set(0,'DefaultFigureWindowStyle','docked')
 
 %% STEP 1
 % CHANGE this variable to choose which sim to analyze
-datafoldername = 'MapL1/';
+datafoldername = 'Map25kF4_2017_1_26_14_33_17.382/';
 
 % CHOOSE which run to plot
 runToPlot = 1;
@@ -20,7 +20,7 @@ runToPlot = 1;
 doLFGO = 0;
 doRFMSLAM = 0;
 doGTSAM = 1;
-doTrueMap = 1;
+doTrueMap = 0;
 
 %% STEP 2
 % base diretory where runs live
@@ -160,13 +160,13 @@ if doGTSAM
     %plot(groundTruth.landmarkPos(1,:),groundTruth.landmarkPos(2,:),'*g');    
     %plot(gtsamdat.estimatedFeats(1,:), gtsamdat.estimatedFeats(2,:),'*m');
     
-    pcovGTSAM = [];    
-    % plot feature error covariance
-    for i = 1:size(gtsamdat.featCovariance,3)
-        ptemp = error_ellipse('C',gtsamdat.featCovariance(:,:,i),'mu',gtsamdat.estimatedFeats(:,i),'conf',confidence,'scale',1,'N', N);
-        pcovGTSAM = [pcovGTSAM ptemp];
-    end    
-    %plot(pcovGTSAM(1,:),pcovGTSAM(2,:),'m');
+%     pcovGTSAM = [];    
+%     % plot feature error covariance
+%     for i = 1:size(gtsamdat.featCovariance,3)
+%         ptemp = error_ellipse('C',gtsamdat.featCovariance(:,:,i),'mu',gtsamdat.estimatedFeats(:,i),'conf',confidence,'scale',1,'N', N);
+%         pcovGTSAM = [pcovGTSAM ptemp];
+%     end    
+%     %plot(pcovGTSAM(1,:),pcovGTSAM(2,:),'m');
     
     xlabel('\textbf{X (m)}','fontsize',14,'fontweight','bold','Interpreter','latex');
     ylabel('\textbf{Y (m)}','fontsize',14,'fontweight','bold','Interpreter','latex');

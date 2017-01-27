@@ -34,13 +34,13 @@ if ~isempty(headingAngle)
     vertexCount = length(headingAngle);
     
     %% Providing the prior for the poses in order to incorporate the heading information
-    headingNoiseModel  = noiseModel.Diagonal.Sigmas([Inf; Inf; sigmaHeading]);
-    % we are not sure that whether GTSAM can handle Inf, so for now we are not using it
-    % headingNoiseModel  = noiseModel.Diagonal.Sigmas([1e10; 1e10; sigmaHeading]);
+    headingNoiseModel  = noiseModel.Diagonal.Sigmas(sigmaHeading);
+    
+    % Add orientation prior to all poses
     for i=2:vertexCount
         mean = initial.at(i);
-        tempMean = Pose2(mean.x,mean.y,headingAngle(i));
-        graph.add(PriorFactorPose2(i, tempMean, headingNoiseModel));
+        tempMean = Pose2(0,0,headingAngle(i));
+        graph.add(PoseRotationPrior2D(i, tempMean, headingNoiseModel));
     end
 end
 
