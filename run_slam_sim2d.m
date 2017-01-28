@@ -20,7 +20,7 @@ if exist('manopt_version', 'file') ~= 2
     addpath(genpath('../../Softwares/CircStat2012a'))
 end
 
-fname = 'Map25kF4';
+fname = 'MapL1';
 
 inpDat = load(['./Environment/',fname,'.mat']);
 nsims = 1;
@@ -59,7 +59,7 @@ end
 
 outDatPath = strcat(baseDirectory,newFolderName,'/');
 
-odoNL = 4; % odometery noise level
+odoNL = 10; % odometery noise level
 rbNL = 4; % range bearing noise level
 
 fprintf('Odo Noise Level = %d \n', odoNL);

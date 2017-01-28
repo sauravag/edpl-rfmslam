@@ -59,6 +59,7 @@ optimizer = LevenbergMarquardtOptimizer(graph, initial, params);
 tStart = tic;
 result = optimizer.optimizeSafely;
 tOptimization = toc(tStart);
+fprintf('Optimization time for GTSAM = %f seconds \n',tOptimization)
 
 marginals = Marginals(graph, result);
 keys = KeyVector(result.keys);
@@ -70,24 +71,26 @@ globalposeXYCovariance = zeros(2,2,size(estimatedPose,1));
 
 pcounter = 0;
 fcounter = 0;
-for i = 0:keys.size-1
-    key = keys.at(i);
-    x = result.at(key);
-    if isa(x, 'gtsam.Pose2')
-        pcounter = pcounter + 1;
-        % gtsam pose covariance is in local frame
-        poseCovariance(:,:,pcounter) = marginals.marginalCovariance(key);
-        % rotate it to global frame
-        ct = cos(x.theta);
-        st = sin(x.theta);
-        gRp = [ct -st;st ct]; % rotation from pose to global
-        globalposeXYCovariance(:,:,pcounter) = gRp*poseCovariance(1:2,1:2,pcounter)*gRp'; % the global frame robot pose x-y covariance
-    end
-    if isa(x, 'gtsam.Point2')
-        fcounter = fcounter + 1;
-        featCovariance(:,:,fcounter) = marginals.marginalCovariance(key);
-    end
-end
+
+%% Extracting covariances (time consuming)
+% for i = 0:keys.size-1
+%     key = keys.at(i);
+%     x = result.at(key);
+%     if isa(x, 'gtsam.Pose2')
+%         pcounter = pcounter + 1;
+%         % gtsam pose covariance is in local frame
+%         poseCovariance(:,:,pcounter) = marginals.marginalCovariance(key);
+%         % rotate it to global frame
+%         ct = cos(x.theta);
+%         st = sin(x.theta);
+%         gRp = [ct -st;st ct]; % rotation from pose to global
+%         globalposeXYCovariance(:,:,pcounter) = gRp*poseCovariance(1:2,1:2,pcounter)*gRp'; % the global frame robot pose x-y covariance
+%     end
+%     if isa(x, 'gtsam.Point2')
+%         fcounter = fcounter + 1;
+%         featCovariance(:,:,fcounter) = marginals.marginalCovariance(key);
+%     end
+% end
 
 featCovariance(:,:,1) = [];
 poseCovariance(:,:,1) = [];
@@ -99,11 +102,14 @@ outdat.featCovariance = featCovariance;
 outdat.tOptimization = tOptimization;
 save(strcat(outputfolder,'gtsam_lev_results.mat'),'outdat');
 
-%% Plot Initial Estimate
+%% Plot Estimates
 if DOPLOT
+    
     mfh = figure;
+    
     plot2DTrajectory(initial, 'b-'); axis equal
-    %% Plot Covariance Ellipses
+    
+    % Plot Covariance Ellipses
     figure(mfh);
     hold on
     plot2DTrajectory(result, 'm');%, marginals);
@@ -113,6 +119,7 @@ if DOPLOT
     axis equal
     hold off;
     saveas(mfh,figName);
+    
 end
 
 tGTSAMStop = toc(tGTSAMStart);

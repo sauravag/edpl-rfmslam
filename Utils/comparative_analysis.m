@@ -16,7 +16,7 @@ function comparative_analysis(baseDirectory)
 fprintf('Start RFMSLAM vs. GTSAM comparison...  \n');
 
 %% Optimizer Parameters
-maxIterat = 100;
+maxIterat = 50;
 absErrorTol = 1e-12;
 relErrorTol = 1e-12;
 initialSigma = [0.01;0.01;0.01*pi/180]; % Initial uncertainty at pose in ICRA SIMS [0.01;0.01;0.05*pi/180]

@@ -12,7 +12,7 @@ set(0,'DefaultFigureWindowStyle','docked')
 
 %% STEP 1
 % CHANGE this variable to choose which sim to analyze
-datafoldername = 'Map25kF4_2017_1_26_14_33_17.382/';
+datafoldername = 'MapL1_2017_1_28_17_36_35.6829/';
 
 % CHOOSE which run to plot
 runToPlot = 1;
